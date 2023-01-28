@@ -53,9 +53,8 @@ try {
 const UpdateTask=async function(req,res){
   try {
     let task=req.params.taskId
-    // let Update=await taskModel.findById(task)
     let Update=await taskModel.findOne({_id:task,isDeleted:false})
-    if(Update) return res.status(400).send({status:false,msg:"data not found"})
+    if(!Update) return res.status(400).send({status:false,msg:"data not found"})
     let data=req.body
     if (Object.keys(data).length == 0)
     return res.status(400).send({ status: false, message: "Input is not present to update" });
@@ -75,7 +74,7 @@ try{
     const taskId = req.params.taskId;
 
     let task = await taskModel.findOne({ _id: taskId, isDeleted: false });
-    if (task) {
+    if (!task) {
       return res.status(404).send({ status: false, message: "Task document does not exist or already deleted" });
     }
 
@@ -88,6 +87,7 @@ try{
     res.status(500).send({ status: false, message: err.message });
   }
 }
+
 
 
 module.exports={CreateTask,UpdateTask,DeleteTask,getTask}
